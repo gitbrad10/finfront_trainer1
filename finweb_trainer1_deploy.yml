@@ -5,19 +5,25 @@ pool:
 
 variables:
   - name: projectName
-    value: 'Training-Student-022-OC007'            # <-- Update this
+    value: 'Training-Student-022-OC007'
   - name: buildPipelineName
-    value: 'finweb_trainer1_build'          # <-- Update this
+    value: 'finweb_trainer1_build'
   - name: artifactName
-    value: 'frontend'        
+    value: 'frontend'
   - name: targetFile
-    value: 'app.py'                             # Optional: Which file inside artifact to display
+    value: 'app.py'
   - name: resourceGroup
-    value: 'Training-Student-022-OC007'        # <-- Update this
+    value: 'Training-Student-022-OC007'
   - name: webAppName
-    value: 'finweb-trainer1'                # <-- Update this Azure Web App target
+    value: 'finweb-trainer1'
 
 steps:
+- script: |
+    echo "Installing Azure CLI..."
+    curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+    az version
+  displayName: 'Install Azure CLI'
+
 - script: |
     echo "Installing Azure DevOps CLI extension..."
     az extension add --name azure-devops || echo "Already installed."
@@ -83,7 +89,7 @@ steps:
 
 - task: AzureCLI@2
   inputs:
-    azureSubscription: 'AzureDevopsConnection'        # <-- Name of your service connection
+    azureSubscription: 'AzureDevopsConnection'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
@@ -95,4 +101,3 @@ steps:
         --src-path deploy.zip \
         --type zip
   displayName: 'Deploy Artifact to Azure Web App'
-
