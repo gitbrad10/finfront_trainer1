@@ -18,11 +18,11 @@ variables:
     value: 'finweb-trainer1'
 
 steps:
-- script: |
-    echo "Installing Azure CLI..."
-    curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-    az version
-  displayName: 'Install Azure CLI'
+# - script: |
+#     echo "Installing Azure CLI..."
+#     curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+#     az version
+#   displayName: 'Install Azure CLI'
 
 - script: |
     echo "Installing Azure DevOps CLI extension..."
@@ -87,33 +87,33 @@ steps:
   env:
     MY_DEVOPS_PAT: $(MY_DEVOPS_PAT)
 
-# - task: AzureCLI@2
-#   inputs:
-#     azureSubscription: 'AzureDevopsConnection'
-#     scriptType: 'bash'
-#     scriptLocation: 'inlineScript'
-#     inlineScript: |
-#       echo "Deploying deploy.zip to Azure Web App: $(webAppName)..."
-#       ls
-#       az webapp deploy \
-#         --resource-group $(resourceGroup) \
-#         --name $(webAppName) \
-#         --src-path deploy.zip \
-#         --type zip
-#   displayName: 'Deploy Artifact to Azure Web App'
-
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'AzureDevopsConnection'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
-    workingDirectory: '$(Build.SourcesDirectory)'
     inlineScript: |
       echo "Deploying deploy.zip to Azure Web App: $(webAppName)..."
-      ls -l $(Build.SourcesDirectory)/deploy.zip
+      ls
       az webapp deploy \
         --resource-group $(resourceGroup) \
         --name $(webAppName) \
-        --src-path $(Build.SourcesDirectory)/deploy.zip \
+        --src-path deploy.zip \
         --type zip
   displayName: 'Deploy Artifact to Azure Web App'
+
+# - task: AzureCLI@2
+#   inputs:
+#     azureSubscription: 'AzureDevopsConnection'
+#     scriptType: 'bash'
+#     scriptLocation: 'inlineScript'
+#     workingDirectory: '$(Build.SourcesDirectory)'
+#     inlineScript: |
+#       echo "Deploying deploy.zip to Azure Web App: $(webAppName)..."
+#       ls -l $(Build.SourcesDirectory)/deploy.zip
+#       az webapp deploy \
+#         --resource-group $(resourceGroup) \
+#         --name $(webAppName) \
+#         --src-path $(Build.SourcesDirectory)/deploy.zip \
+#         --type zip
+#   displayName: 'Deploy Artifact to Azure Web App'
