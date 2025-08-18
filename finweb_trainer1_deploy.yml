@@ -87,14 +87,30 @@ steps:
   env:
     MY_DEVOPS_PAT: $(MY_DEVOPS_PAT)
 
+# - task: AzureCLI@2
+#   inputs:
+#     azureSubscription: 'AzureDevopsConnection'
+#     scriptType: 'bash'
+#     scriptLocation: 'inlineScript'
+#     inlineScript: |
+#       echo "Deploying deploy.zip to Azure Web App: $(webAppName)..."
+#       ls
+#       az webapp deploy \
+#         --resource-group $(resourceGroup) \
+#         --name $(webAppName) \
+#         --src-path deploy.zip \
+#         --type zip
+#   displayName: 'Deploy Artifact to Azure Web App'
+
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'AzureDevopsConnection'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
+    workingDirectory: '$(Build.SourcesDirectory)'  # 👈 Ensures correct path
     inlineScript: |
       echo "Deploying deploy.zip to Azure Web App: $(webAppName)..."
-      ls
+      ls -l deploy.zip
       az webapp deploy \
         --resource-group $(resourceGroup) \
         --name $(webAppName) \
